@@ -6,8 +6,8 @@
       {{ snackBarText }}
     </v-snackbar>
 
-    <v-row height="100%">
-      <v-col col="3">
+    <v-row class="">
+      <v-col col="3" class="container">
         <ScriptOptionsMenu @switchSettings="switchPage" :isServer="setupDetails.isServer" />
       </v-col>
       <v-col sm="9">

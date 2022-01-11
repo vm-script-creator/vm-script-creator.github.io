@@ -1,5 +1,5 @@
 <template>
     <div>
-        <p>Select a setup phase.</p>
+        <p>Welcome to the script editor.</p>
     </div>
 </template>

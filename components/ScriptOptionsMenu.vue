@@ -1,8 +1,8 @@
 <template>
   <v-card
     width="256"
-    height="100%"
     class="mx-auto"
+    height="500"
   >
     <v-navigation-drawer permanent>
       <v-list-item>
