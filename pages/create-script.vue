@@ -6,8 +6,8 @@
       {{ snackBarText }}
     </v-snackbar>
 
-    <v-row class="">
-      <v-col col="3" class="container">
+    <v-row>
+      <v-col col="3">
         <ScriptOptionsMenu @switchSettings="switchPage" :isServer="setupDetails.isServer" />
       </v-col>
       <v-col sm="9">
@@ -16,14 +16,14 @@
           <v-checkbox v-model="setupDetails.isServer" :label="`Computer is a: ${setupDetails.isServer ? 'Server' : 'Workstation'}`" />
           <v-checkbox v-model="setupDetails.changeHostname" :label="`Change hostname: ${setupDetails.changeHostname.toString()}`" />
           <v-text-field label="Hostname" counter="15" v-model="setupDetails.hostname" :disabled="!setupDetails.changeHostname" />
+          <v-text-field label="Admin password (REQUIRED)" counter="256" v-model="setupDetails.adminPwd" />
           <v-checkbox v-model="setupDetails.changeAdminPassword" :label="`Change admin password: ${setupDetails.changeAdminPassword.toString()}`" />
-          <v-text-field label="Admin password" counter="256" v-model="setupDetails.adminPwd" :disabled="!setupDetails.changeAdminPassword" />
         </div>
         <div v-if="currentPage == 'serverRoles'">
           <v-checkbox v-model="setupDetails.ADDS.install" :label="`Install Active Directory Domain Services: ${setupDetails.ADDS.install.toString()}`" />
           <div v-if="setupDetails.ADDS.install">
-            <v-text-field label="Domain Name (e.g. lab.local)" counter="256" v-model="setupDetails.ADDS.domainName" />
-            <v-text-field label="Domain Netbios Name (e.g. LAB)" counter="256" v-model="setupDetails.ADDS.netbiosName" />
+            <v-text-field label="Domain Name (e.g. lab.local) (REQUIRED)" counter="256" v-model="setupDetails.ADDS.domainName" />
+            <v-text-field label="Domain Netbios Name (e.g. LAB) (REQUIRED)" counter="256" v-model="setupDetails.ADDS.netbiosName" />
           </div>
         </div>
         <div v-if="currentPage == 'otherServices'">
@@ -32,9 +32,9 @@
           <v-checkbox v-model="setupDetails.ADCS.install" :label="`Install ADCS: ${setupDetails.ADCS.install.toString()}`" />
         </div>
         <div v-if="currentPage == 'users'">
-            <v-text-field v-model="userSam" label="Sam Account Name" />
-            <v-text-field v-model="userDisplayName" label="Display Name" />
-            <v-text-field v-model="userPassword" label="Password" />
+            <v-text-field v-model="userSam" label="Sam Account Name (REQUIRED)" />
+            <v-text-field v-model="userDisplayName" label="Display Name (REQUIRED)" />
+            <v-text-field v-model="userPassword" label="Password (REQUIRED)" />
             <v-checkbox v-model="userWinRMAccess" label="WinRM Access" />
             <v-btn
               elevation="2"
@@ -190,6 +190,7 @@
         })
       },
       downloadScript(n) {
+        // copilot wrote this function
         let script = "";
         switch (n) {
           case 1:
