@@ -60,7 +60,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer> -->
-    <v-footer absolute bottom fixed app>
+    <v-footer absolute bottom app class="sticky">
       <span>&copy; {{ new Date().getFullYear() }} d4rckh</span>
     </v-footer>
   </v-app>
@@ -94,3 +94,9 @@
   }
 
 </script>
+
+<style>
+.sticky {
+  position: sticky;
+}
+</style>
