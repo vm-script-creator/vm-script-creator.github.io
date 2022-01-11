@@ -8,7 +8,7 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="text-h6">
-            Choose the elements
+            Setup phases
           </v-list-item-title>
           <!-- <v-list-item-subtitle>
             subtext
@@ -24,16 +24,13 @@
       >
         <v-list-item
           v-for="item in items"
+          v-if="item.computerType == 'both' ? true : item.computerType == computerType"
           :key="item.title"
           @click="$emit('switchSettings', item.page)"
           button
         >
-          <!-- <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon> -->
-
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{items.filter(item => item.computerType == 'both' ? true : item.computerType == computerType).indexOf(item) + 1}}. {{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -48,15 +45,39 @@ export default {
         return {
             items: [
                 {
-                    title: '1. Initial setup',
-                    page: 'initialSetup'
+                    title: 'Initial setup',
+                    page: 'initialSetup',
+                    computerType: 'both'
+                },
+                {
+                    title: 'Server Roles',
+                    page: 'serverRoles',
+                    computerType: 'server'
+                },
+                {
+                    title: 'Other services',
+                    page: 'otherServices',
+                    computerType: 'both'
+                },
+                {
+                    title: 'Users',
+                    page: 'users',
+                    computerType: 'both'
                 }
             ]
         }
     },
+    computed: {
+        computerType() {return this.isServer ? 'server' : 'client'}
+    },
     methods: {
         goTo(page) {
             this.$router.push(page);
+        }
+    },
+    props: {
+        isServer: {
+            type: Boolean
         }
     }
 }

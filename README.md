@@ -1,5 +1,7 @@
 # vm-script-creator
 
+This is an app written in NuxtJS which can be used for creating customizable PowerShell scripts for setting up Windows clients and servers.
+
 ## Build Setup
 
 ```bash
