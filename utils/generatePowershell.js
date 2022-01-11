@@ -63,7 +63,7 @@ export default function generatePowershell(props) {
     if (props.changeAdminPassword) powershell1 += changeAdminPw(props.adminPwd);
     powershell1 += generateCreds(props.adminUser, props.adminPwd);
     if (props.changeHostname) powershell1 += changeHostname(props.hostname);
-    powershell2 += restartComputer();
+    powershell1 += restartComputer();
 
     // SCRIPT 2 (SERVERS ONLY)
     // Installing ADDS forest and setting up the domain

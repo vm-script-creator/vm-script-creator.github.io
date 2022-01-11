@@ -60,7 +60,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer> -->
-    <v-footer absolute app>
+    <v-footer absolute bottom fixed app>
       <span>&copy; {{ new Date().getFullYear() }} d4rckh</span>
     </v-footer>
   </v-app>
