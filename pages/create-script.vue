@@ -1,8 +1,6 @@
 <template>
   <v-container fluid>
-        <v-snackbar
-          v-model="snackbar"
-        >
+    <v-snackbar v-model="snackbar">
       {{ snackBarText }}
     </v-snackbar>
 
@@ -13,91 +11,61 @@
       <v-col sm="9">
         <home v-if="currentPage == 'default'" />
         <div v-if="currentPage == 'initialSetup'">
-          <v-checkbox v-model="setupDetails.isServer" :label="`Computer is a: ${setupDetails.isServer ? 'Server' : 'Workstation'}`" />
-          <v-checkbox v-model="setupDetails.changeHostname" :label="`Change hostname: ${setupDetails.changeHostname.toString()}`" />
-          <v-text-field label="Hostname" counter="15" v-model="setupDetails.hostname" :disabled="!setupDetails.changeHostname" />
+          <v-checkbox v-model="setupDetails.isServer"
+            :label="`Computer is a: ${setupDetails.isServer ? 'Server' : 'Workstation'}`" />
+          <v-checkbox v-model="setupDetails.changeHostname"
+            :label="`Change hostname: ${setupDetails.changeHostname.toString()}`" />
+          <v-text-field label="Hostname" counter="15" v-model="setupDetails.hostname"
+            :disabled="!setupDetails.changeHostname" />
           <v-text-field label="Admin password (REQUIRED)" counter="256" v-model="setupDetails.adminPwd" />
-          <v-checkbox v-model="setupDetails.changeAdminPassword" :label="`Change admin password: ${setupDetails.changeAdminPassword.toString()}`" />
+          <v-checkbox v-model="setupDetails.changeAdminPassword"
+            :label="`Change admin password: ${setupDetails.changeAdminPassword.toString()}`" />
         </div>
         <div v-if="currentPage == 'serverRoles'">
-          <v-checkbox v-model="setupDetails.ADDS.install" :label="`Install Active Directory Domain Services: ${setupDetails.ADDS.install.toString()}`" />
+          <v-checkbox v-model="setupDetails.ADDS.install"
+            :label="`Install Active Directory Domain Services: ${setupDetails.ADDS.install.toString()}`" />
           <div v-if="setupDetails.ADDS.install">
-            <v-text-field label="Domain Name (e.g. lab.local) (REQUIRED)" counter="256" v-model="setupDetails.ADDS.domainName" />
-            <v-text-field label="Domain Netbios Name (e.g. LAB) (REQUIRED)" counter="256" v-model="setupDetails.ADDS.netbiosName" />
+            <v-text-field label="Domain Name (e.g. lab.local) (REQUIRED)" counter="256"
+              v-model="setupDetails.ADDS.domainName" />
+            <v-text-field label="Domain Netbios Name (e.g. LAB) (REQUIRED)" counter="256"
+              v-model="setupDetails.ADDS.netbiosName" />
           </div>
         </div>
         <div v-if="currentPage == 'otherServices'">
-          <v-checkbox v-model="setupDetails.enableWinRM" :label="`Enable WinRM: ${setupDetails.enableWinRM.toString()}`" />
+          <v-checkbox v-model="setupDetails.enableWinRM"
+            :label="`Enable WinRM: ${setupDetails.enableWinRM.toString()}`" />
           <v-checkbox v-model="setupDetails.enableRDP" :label="`Enable RDP: ${setupDetails.enableRDP.toString()}`" />
-          <v-checkbox v-model="setupDetails.ADCS.install" :label="`Install ADCS: ${setupDetails.ADCS.install.toString()}`" />
+          <v-checkbox v-model="setupDetails.ADCS.install"
+            :label="`Install ADCS: ${setupDetails.ADCS.install.toString()}`" />
         </div>
         <div v-if="currentPage == 'users'">
-            <v-text-field v-model="userSam" label="Sam Account Name (REQUIRED)" />
-            <v-text-field v-model="userDisplayName" label="Display Name (REQUIRED)" />
-            <v-text-field v-model="userPassword" label="Password (REQUIRED)" />
-            <v-checkbox v-model="userWinRMAccess" label="WinRM Access" />
-            <v-btn
-              elevation="2"
-              large
-              class="mb-4"
-              @click="addUser"
-              color="green"
-            >Add User</v-btn>
-            <v-data-table
-              dense
-              :headers="userTableHeaders"
-              :items="setupDetails.users"
-              item-key="name"
-              class="elevation-1"
-              v-model="selectedUsers"
-              :singleSelect="false"
-              show-select
-            ></v-data-table> 
-            <v-btn
-              fab
-              small
-              class="mt-2"
-              v-if="selectedUsers.length > 0"
-              @click="deleteUsers"
-              color="red"
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
+          <v-text-field v-model="userSam" label="Sam Account Name (REQUIRED)" />
+          <v-text-field v-model="userDisplayName" label="Display Name (REQUIRED)" />
+          <v-text-field v-model="userPassword" label="Password (REQUIRED)" />
+          <v-checkbox v-model="userWinRMAccess" label="WinRM Access" />
+          <v-btn elevation="2" large class="mb-4" @click="addUser" color="green">Add User</v-btn>
+          <v-data-table dense :headers="userTableHeaders" :items="setupDetails.users" item-key="name"
+            class="elevation-1" v-model="selectedUsers" :singleSelect="false" show-select></v-data-table>
+          <v-btn fab small class="mt-2" v-if="selectedUsers.length > 0" @click="deleteUsers" color="red">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </div>
         <div v-if="currentPage =='build'">
           <p>There will be 3 scripts being created (Only 2 if the computer is a client):</p>
-          <p>1. Customizing Windows via registry tweaks, debloating it, changing hostname, changing admin password and other things that require a reboot.</p>
-          <p>2. Installing ADDS, setting up the forest, and other server stuff that do require a reboot (ONLY IF THE COMPUTER IS A SERVER)</p>
-          <p>3. Creating files, installing services that do not require a reboot, creating users, and other tasks that do not require a reboot.</p>
-          <v-btn
-            elevation="2"
-            large
-            class="mb-4"
-            @click="buildScript"
-            color="primary"
-          >Build Scripts</v-btn>
+          <p>1. Customizing Windows via registry tweaks, debloating it, changing hostname, changing admin password and
+            other things that require a reboot.</p>
+          <p>2. Installing ADDS, setting up the forest, and other server stuff that do require a reboot (ONLY IF THE
+            COMPUTER IS A SERVER)</p>
+          <p>3. Creating files, installing services that do not require a reboot, creating users, and other tasks that
+            do not require a reboot.</p>
+          <v-btn elevation="2" large class="mb-4" @click="buildScript" color="primary">Build Scripts</v-btn>
           <v-textarea v-model="script1" label="Script #1" :disabled="true" />
-          <v-btn
-            elevation="2"
-            large
-            class="mb-4"
-            @click="downloadScript(1)"
-          >Download Script #1</v-btn>
+          <v-btn elevation="2" large class="mb-4" @click="downloadScript(1)">Download Script #1</v-btn>
           <v-textarea v-model="script2" label="Script #2" v-if="setupDetails.isServer" :disabled="true" />
-          <v-btn
-            elevation="2"
-            large
-            class="mb-4"
-            @click="downloadScript(2)"
-            v-if="setupDetails.isServer"
-          >Download Script #2</v-btn>
+          <v-btn elevation="2" large class="mb-4" @click="downloadScript(2)" v-if="setupDetails.isServer">Download
+            Script #2</v-btn>
           <v-textarea v-model="script3" label="Script #3" :disabled="true" />
-          <v-btn
-            elevation="2"
-            large
-            class="mb-4"
-            @click="downloadScript(3)"
-          >Download Script #3</v-btn>
+          <v-btn elevation="2" large class="mb-4" @click="downloadScript(3)">Download Script #3</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -128,7 +96,19 @@
         userWinRMAccess: false,
         selectedUsers: [],
         currentPage: "default",
-        userTableHeaders: [{text: "Name", value: "samAccountName"}, {text: "Display Name", value: "name"}, {text: "Password", value: "password"}, {text: "WinRM Access", value: "winRM"}],
+        userTableHeaders: [{
+          text: "Name",
+          value: "samAccountName"
+        }, {
+          text: "Display Name",
+          value: "name"
+        }, {
+          text: "Password",
+          value: "password"
+        }, {
+          text: "WinRM Access",
+          value: "winRM"
+        }],
         setupDetails: {
           hostname: "",
           adminPwd: "",
@@ -137,7 +117,7 @@
           changeHostname: false,
           changeAdminPassword: false,
           isServer: false,
-          
+
           // ADDS
           ADDS: {
             install: false,
@@ -179,7 +159,8 @@
         this.userWinRMAccess = false;
       },
       deleteUsers() {
-        this.setupDetails.users = this.setupDetails.users.filter(user => !this.selectedUsers.includes(user)) // console.log(this.selectedUsers)
+        this.setupDetails.users = this.setupDetails.users.filter(user => !this.selectedUsers.includes(
+          user)) // console.log(this.selectedUsers)
         this.selectedUsers = []
       },
       buildScript() {

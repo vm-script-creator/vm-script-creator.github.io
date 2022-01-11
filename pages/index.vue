@@ -6,16 +6,13 @@
           Welcome to the VM Script Creator
         </v-card-title>
         <v-card-text>
-          <p>VM Script Creator allows you to create customisable PowerShell scripts that can automate the setup of your VMs (creation of users, services, debloating, etc).</p>
+          <p>VM Script Creator allows you to create customisable PowerShell scripts that can automate the setup of your
+            VMs (creation of users, services, debloating, etc).</p>
           <p>Thank you for using VM Script Creator, press "Create new script" to get started.</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/create-script"
-          >
+          <v-btn color="primary" nuxt to="/create-script">
             Create new script
           </v-btn>
         </v-card-actions>
@@ -25,7 +22,8 @@
 </template>
 
 <script>
-export default {
-  name: 'IndexPage'
-}
+  export default {
+    name: 'IndexPage'
+  }
+
 </script>
