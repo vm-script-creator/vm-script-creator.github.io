@@ -63,6 +63,11 @@ export default {
                     title: 'Users',
                     page: 'users',
                     computerType: 'both'
+                },
+                {
+                    title: 'Build',
+                    page: 'build',
+                    computerType: 'both'
                 }
             ]
         }

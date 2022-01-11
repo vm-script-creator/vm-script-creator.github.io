@@ -41,6 +41,7 @@
               large
               class="mb-4"
               @click="addUser"
+              color="green"
             >Add User</v-btn>
             <v-data-table
               dense
@@ -55,13 +56,48 @@
             <v-btn
               fab
               small
-              dark
               class="mt-2"
               v-if="selectedUsers.length > 0"
               @click="deleteUsers"
+              color="red"
             >
               <v-icon>mdi-delete</v-icon>
             </v-btn>
+        </div>
+        <div v-if="currentPage =='build'">
+          <p>There will be 3 scripts being created (Only 2 if the computer is a client):</p>
+          <p>1. Customizing Windows via registry tweaks, debloating it, changing hostname, changing admin password and other things that require a reboot.</p>
+          <p>2. Installing ADDS, setting up the forest, and other server stuff that do require a reboot (ONLY IF THE COMPUTER IS A SERVER)</p>
+          <p>3. Creating files, installing services that do not require a reboot, creating users, and other tasks that do not require a reboot.</p>
+          <v-btn
+            elevation="2"
+            large
+            class="mb-4"
+            @click="buildScript"
+            color="primary"
+          >Build Scripts</v-btn>
+          <v-textarea v-model="script1" label="Script #1" :disabled="true" />
+          <v-btn
+            elevation="2"
+            large
+            class="mb-4"
+            @click="downloadScript(1)"
+          >Download Script #1</v-btn>
+          <v-textarea v-model="script2" label="Script #2" v-if="setupDetails.isServer" :disabled="true" />
+          <v-btn
+            elevation="2"
+            large
+            class="mb-4"
+            @click="downloadScript(2)"
+            v-if="setupDetails.isServer"
+          >Download Script #2</v-btn>
+          <v-textarea v-model="script3" label="Script #3" :disabled="true" />
+          <v-btn
+            elevation="2"
+            large
+            class="mb-4"
+            @click="downloadScript(3)"
+          >Download Script #3</v-btn>
         </div>
       </v-col>
     </v-row>
@@ -71,7 +107,7 @@
 <script>
   import ScriptOptionsMenu from "../components/ScriptOptionsMenu.vue";
   import home from "../components/scriptCreator/home.vue";
-
+  import generatePowershell from "../utils/generatePowershell";
   export default {
     name: "CreateScript",
     components: {
@@ -81,6 +117,9 @@
     computed: {},
     data() {
       return {
+        script1: '',
+        script2: '',
+        script3: '',
         snackbar: false,
         snackBarText: '',
         userSam: '',
@@ -142,6 +181,34 @@
       deleteUsers() {
         this.setupDetails.users = this.setupDetails.users.filter(user => !this.selectedUsers.includes(user)) // console.log(this.selectedUsers)
         this.selectedUsers = []
+      },
+      buildScript() {
+        generatePowershell(this.setupDetails).then(script => {
+          this.script1 = script.powershell1;
+          this.script2 = script.powershell2;
+          this.script3 = script.powershell3;
+        })
+      },
+      downloadScript(n) {
+        let script = "";
+        switch (n) {
+          case 1:
+            script = this.script1;
+            break;
+          case 2:
+            script = this.script2;
+            break;
+          case 3:
+            script = this.script3;
+            break;
+        }
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(script));
+        element.setAttribute('download', `script-${n}.ps1`);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
       }
     }
   }
