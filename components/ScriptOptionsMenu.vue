@@ -1,7 +1,7 @@
 <template>
   <v-card
-    height="400"
     width="256"
+    height="100%"
     class="mx-auto"
   >
     <v-navigation-drawer permanent>
