@@ -38,6 +38,11 @@
             computerType: 'both'
           },
           {
+            title: 'Networking',
+            page: 'networking',
+            computerType: 'both'
+          },
+          {
             title: 'Server Roles',
             page: 'serverRoles',
             computerType: 'server'

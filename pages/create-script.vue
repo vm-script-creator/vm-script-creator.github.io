@@ -21,6 +21,22 @@
           <v-checkbox v-model="setupDetails.changeAdminPassword"
             :label="`Change admin password: ${setupDetails.changeAdminPassword.toString()}`" />
         </div>
+        <div v-if="currentPage == 'networking'">
+          <v-checkbox v-model="setupDetails.networking.doNetworking"
+            :label="`Do networking: ${setupDetails.networking.doNetworking.toString()}`" />
+          <div v-if="setupDetails.networking.doNetworking">
+            <v-text-field v-model="setupDetails.networking.iF" label="Interface Name"></v-text-field>
+            <v-text-field v-model="setupDetails.networking.dns1" label="DNS Server #1"></v-text-field>
+            <!-- <v-text-field v-model="setupDetails.networking.dns2" label="DNS Server #2"></v-text-field> -->
+            <v-checkbox v-model="setupDetails.networking.enableDHCP"
+              :label="`Enable DHCP: ${setupDetails.networking.enableDHCP.toString()}`" />
+            <div v-if="!setupDetails.networking.enableDHCP">
+              <v-text-field v-model="setupDetails.networking.staticConf.ip" label="Static IP"></v-text-field>
+              <v-text-field v-model="setupDetails.networking.staticConf.gateway" label="Gateway IP"></v-text-field>
+              <v-text-field v-model="setupDetails.networking.staticConf.subnet" label="Subnet Mask"></v-text-field>
+            </div>
+          </div>
+        </div>
         <div v-if="currentPage == 'serverRoles'">
           <v-checkbox v-model="setupDetails.ADDS.install"
             :label="`Install Active Directory Domain Services: ${setupDetails.ADDS.install.toString()}`" />
@@ -41,7 +57,7 @@
         <div v-if="currentPage == 'users'">
           <v-text-field v-model="userSam" label="Sam Account Name (REQUIRED)" />
           <v-text-field v-model="userDisplayName" label="Display Name (REQUIRED)" />
-          <v-text-field v-model="userPassword" label="Password (REQUIRED)" />
+          <v-text-field v-model="userPassword" label="Password: Please make sure the password is complex enough otherwise your user will be disabled after creation! (REQUIRED)" />
           <v-checkbox v-model="userWinRMAccess" label="WinRM Access" />
           <v-btn elevation="2" large class="mb-4" @click="addUser" color="green">Add User</v-btn>
           <v-data-table dense :headers="userTableHeaders" :items="setupDetails.users" item-key="name"
@@ -133,7 +149,20 @@
           enableWinRM: false,
           enableRDP: false,
 
-          users: []
+          users: [],
+
+          networking: {
+            doNetworking: false,
+            iF: "",
+            enableDHCP: true,
+            dns1: "",
+            dns2: "",
+            staticConf: {
+              ip: "",
+              gateway: "",
+              subnet: ""
+            }
+          }
         }
       }
     },
